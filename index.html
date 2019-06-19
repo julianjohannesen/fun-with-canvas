@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Breakout!</title>
+
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        canvas {
+            background: #eee;
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <canvas id="myCanvas" width="480" height="320"></canvas>
+
+    <script>
+        const canvas = document.getElementById("myCanvas");
+        const ctx = canvas.getContext("2d");
+
+        // Draw a rectangle on the canvas
+        ctx.beginPath();
+        // First 2 are top left corner, next 2 are width and height
+        ctx.rect(200, 80, 50, 200);
+        ctx.fillStyle = "#ff0000";
+        ctx.fill();
+        ctx.closePath();
+
+        // Draw a circle on the canvas
+        ctx.beginPath();
+        // x and y coordinates of the arc's center
+        // arc radius
+        // start angle and end angle (what angle to start and finish drawing the circle, in radians)
+        // direction of drawing (false for clockwise, the default, or true for anti-clockwise.) This last parameter is optional
+        ctx.arc(225, 160, 20, 0, Math.PI * 2, false);
+        ctx.fillStyle = "green";
+        ctx.fill();
+        ctx.closePath();
+
+        // A rectangle with a stroke instead of a fill
+        ctx.beginPath();
+        ctx.rect(160, 10, 100, 40);
+        // Using the rgba() function here
+        ctx.strokeStyle = "rgba(0, 0, 255, 0.5)";
+        ctx.stroke();
+        ctx.closePath();
+
+    </script>
+</body>
+
+</html>
