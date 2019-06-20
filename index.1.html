@@ -26,37 +26,72 @@
     <canvas id="myCanvas" width="480" height="320"></canvas>
 
     <script>
+
+        // Get canvas context
         const canvas = document.getElementById("myCanvas");
         const ctx = canvas.getContext("2d");
         
-        let r = 5;
-        // Place the circle dead center on the canvas
+        // Arc variables initial state
+        // Place the circle at the center of the canvas
         let x = canvas.width/2;
         let y = canvas.height/2;
-        let radius = 20;
+        // Initial radius of 5
+        let r = 5;
+        // Start and end of arc in radians
         let radianStart = 0;
         let radianEnd = Math.PI*2;
+        // Extra counter
         let counter = 1;
+        // Deltas
         let dx = 1/counter;
         let dy = -1/counter;
-        
-        
+        let dr = 1
+        let da = 0;
+        // Radius change flag
+        let gettingSmaller = false;
 
+        // Draw function
+        function drawBall() {
 
-        function draw() {
             ctx.beginPath();
-            ctx.arc(x, y, radius, radianStart, radianEnd, false);
-            ctx.fillStyle = "#0095DD";
+            ctx.arc(x, y, r, radianStart, radianEnd, false);
+            ctx.fillStyle = "pink";
             ctx.fill();
             ctx.strokeStyle = "rgba(0, 0, 255, 0.5)";
             ctx.stroke();
             ctx.closePath();
+        }
+
+        function draw() {
+
+            // Clear previous paint. Parameters: the x and y coordinates
+            // of the top left corner of a rectangle, and the x and y coordinates
+            // of the bottom right corner of a rectangle
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw the ball
+            drawBall();
+
+            // Update variables
             x += dx; 
             y += dy;
+            
+            // Toggle radius b/w growing and shrinking b/w 0 and 20
+            
+            // If r at the upper limit, set gettingSmaller to true. Otherwise, if r is at the lower limit, set gettingSmaller to false.
+            if(r===20) {gettingSmaller = true}
+            else if(r===0) {gettingSmaller = false}
+
+            // While r is less than 20 and not getting smaller, increment it. Otherwise, while r is greater than 0 and it _is_ getting smaller, decrement it.
+            if(r<=20 && !gettingSmaller) {r += dr} 
+            else if(r>=0 && gettingSmaller) {r -= dr}
+            
             counter = counter - 1;
         }
 
-        setInterval(draw, 10);
+        // Repaint
+        let paintSpeed = 50;
+        setInterval(draw, paintSpeed);
 
     </script>
 </body>
