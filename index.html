@@ -16,7 +16,7 @@
         canvas {
             background: #eee;
             display: block;
-            margin: 0 auto;
+            margin: 10em auto;
         }
     </style>
 </head>
@@ -26,35 +26,84 @@
     <canvas id="myCanvas" width="480" height="320"></canvas>
 
     <script>
+
+        // Get canvas context
         const canvas = document.getElementById("myCanvas");
         const ctx = canvas.getContext("2d");
+        
+        // Arc variables initial state
+        // Place the circle at the center of the canvas
+        let x = canvas.width/2;
+        let y = canvas.height/2;
+        // Initial radius of 5
+        let ballRadius = 5;
+        // Start and end of arc in radians
+        let arcStart = 0;
+        let arcEnd = Math.PI*2;
+        // Extra counter
+        let counter = 1;
+        // Deltas
+        let dx = 1/counter;
+        let dy = -1/counter;
+        let dr = 1
+        let da = 0;
+        // Radius change flag
+        let gettingSmaller = false;
 
-        // Draw a rectangle on the canvas
-        ctx.beginPath();
-        // First 2 are top left corner, next 2 are width and height
-        ctx.rect(200, 80, 50, 200);
-        ctx.fillStyle = "#ff0000";
-        ctx.fill();
-        ctx.closePath();
+        // Draw function
+        function drawBall() {
 
-        // Draw a circle on the canvas
-        ctx.beginPath();
-        // x and y coordinates of the arc's center
-        // arc radius
-        // start angle and end angle (what angle to start and finish drawing the circle, in radians)
-        // direction of drawing (false for clockwise, the default, or true for anti-clockwise.) This last parameter is optional
-        ctx.arc(225, 160, 20, 0, Math.PI * 2, false);
-        ctx.fillStyle = "green";
-        ctx.fill();
-        ctx.closePath();
+            ctx.beginPath();
+            ctx.arc(x, y, ballRadius, arcStart, arcEnd, false);
+            ctx.fillStyle = "pink";
+            ctx.fill();
+            ctx.strokeStyle = "rgba(0, 0, 255, 0.5)";
+            ctx.stroke();
+            ctx.closePath();
+        }
 
-        // A rectangle with a stroke instead of a fill
-        ctx.beginPath();
-        ctx.rect(160, 10, 100, 40);
-        // Using the rgba() function here
-        ctx.strokeStyle = "rgba(0, 0, 255, 0.5)";
-        ctx.stroke();
-        ctx.closePath();
+        function draw() {
+
+            // Clear previous paint. Parameters: the x and y coordinates
+            // of the top left corner of a rectangle, and the x and y coordinates
+            // of the bottom right corner of a rectangle
+            // ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw the ball
+            drawBall();
+
+            // Check for edges
+            // Is the ball hitting the right or left side of the canvas?
+            // Then change direction.
+            if(x + dx > canvas.width || x + dx < 0) {
+                dx = -dx;
+            }
+            // Is the ball hitting the bottom or top of the canvass? 
+            // Then change direction.
+            if(y + dy > canvas.height || y + dy < 0) {
+                dy = -dy;
+            } 
+
+            // Update variables
+            x += dx;
+            y += dy;
+            
+            // Toggle radius b/w growing and shrinking b/w 0 and 20
+            
+            // If r at the upper limit, set gettingSmaller to true. Otherwise, if r is at the lower limit, set gettingSmaller to false.
+            if(ballRadius===20) {gettingSmaller = true}
+            else if(ballRadius===0) {gettingSmaller = false}
+
+            // While r is less than 20 and not getting smaller, increment it. Otherwise, while r is greater than 0 and it _is_ getting smaller, decrement it.
+            if(ballRadius<=20 && !gettingSmaller) {ballRadius += dr} 
+            else if(ballRadius>=0 && gettingSmaller) {ballRadius -= dr}
+            
+            counter = counter - 1;
+        }
+
+        // Repaint
+        let paintSpeed = 10;
+        setInterval(draw, paintSpeed);
 
     </script>
 </body>
